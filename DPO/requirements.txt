@@ -1,0 +1,8 @@
+pandas
+datasets
+transformers
+trl
+peft
+accelerate
+torch
+matplotlib

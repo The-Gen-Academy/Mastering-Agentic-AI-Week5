@@ -1,0 +1,26 @@
+# Python dependencies for the SFT Intent Classification workshop.
+#
+# On Google Colab these are installed by the first code cell in the notebook
+# (`!pip install ...`), so you do NOT need this file there.
+#
+# For a local run (NVIDIA GPU + CUDA recommended):
+#   python3 -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements.txt
+
+transformers
+trl
+peft
+datasets
+bitsandbytes
+torchao
+torch
+
+# Data handling & visualization
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+
+# Notebook runtime (local only; Colab provides this)
+jupyterlab

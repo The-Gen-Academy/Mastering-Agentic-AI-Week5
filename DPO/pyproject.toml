@@ -1,0 +1,25 @@
+[project]
+name = "brand-voice-dpo"
+version = "0.1.0"
+description = "Week 5 DPO workflow aligning an LLM to The Gen Academy's brand voice."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "pandas",
+    "datasets",
+    "transformers",
+    "trl",
+    "peft",
+    "accelerate",
+    "torch",
+    "matplotlib",
+]
+
+[dependency-groups]
+notebook = [
+    "jupyter",
+    "ipykernel",
+]
+
+[tool.uv]
+default-groups = ["notebook"]
