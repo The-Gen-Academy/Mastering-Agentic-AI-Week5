@@ -1,0 +1,3394 @@
+system,user,ground_truth
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List users whose completed order total is at least 200 dollars.
+
+Broken query:
+SELECT u.name, SUM(o.amount) AS amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed' AND amount >= 200
+GROUP BY u.id, u.name
+ORDER BY amount DESC","SELECT u.name, SUM(o.amount) AS completed_total
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING SUM(o.amount) >= 200
+ORDER BY completed_total DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count completed orders for each user who has at least one completed order.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'complete'
+GROUP BY u.id, u.name
+ORDER BY completed_orders DESC","SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List each order with the user who placed it.
+
+Broken query:
+SELECT o.id AS order_id, u.name, o.amount, o.status
+FROM orders o
+JOIN users u ON o.id = u.id
+ORDER BY o.id ASC","SELECT o.id AS order_id, u.name, o.amount, o.status
+FROM orders o
+JOIN users u ON o.user_id = u.id
+ORDER BY o.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every user and their total completed order amount, including users with no completed orders as zero.
+
+Broken query:
+SELECT u.name, COALESCE(SUM(o.amount), 0) AS completed_total
+FROM users u
+JOIN orders o ON u.id = o.user_id AND o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_total DESC","SELECT u.name, COALESCE(SUM(o.amount), 0) AS completed_total
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_total DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count how many completed orders each user has placed.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_orders DESC","SELECT u.name, COUNT(DISTINCT o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show the three cheapest products first.
+
+Broken query:
+SELECT name, category, price
+FROM products
+ORDER BY price DESC
+LIMIT 3","SELECT name, category, price
+FROM products
+ORDER BY price ASC
+LIMIT 3"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find product categories whose average product price is above the global average product price.
+
+Broken query:
+SELECT category, AVG(price) AS avg_price
+FROM products
+GROUP BY category
+HAVING AVG(price) > AVG(price)
+ORDER BY avg_price DESC","SELECT category, AVG(price) AS avg_price
+FROM products
+GROUP BY category
+HAVING AVG(price) > (
+    SELECT AVG(price)
+    FROM products
+)
+ORDER BY avg_price DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find categories whose total in-stock quantity is greater than 10.
+
+Broken query:
+SELECT category, SUM(stock) AS stock
+FROM products
+WHERE stock > 10
+GROUP BY category
+ORDER BY stock DESC","SELECT category, SUM(stock) AS total_stock
+FROM products
+GROUP BY category
+HAVING SUM(stock) > 10
+ORDER BY total_stock DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Calculate total revenue from completed orders only.
+
+Broken query:
+SELECT SUM(amount) AS completed_revenue
+FROM orders
+WHERE status = 'paid'","SELECT SUM(amount) AS completed_revenue
+FROM orders
+WHERE status = 'completed'"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show each order item with its product name and quantity.
+
+Broken query:
+SELECT oi.id AS item_id, p.name AS product_name, oi.quantity
+FROM order_items oi
+JOIN products p ON oi.order_id = p.id
+ORDER BY oi.id ASC","SELECT oi.id AS item_id, p.name AS product_name, oi.quantity
+FROM order_items oi
+JOIN products p ON oi.product_id = p.id
+ORDER BY oi.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List every product and the number of order items referencing it, including products that have never been ordered.
+
+Broken query:
+SELECT p.name, COUNT(oi.id) AS item_rows
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+ORDER BY p.name ASC","SELECT p.name, COUNT(oi.id) AS item_rows
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+ORDER BY p.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users who have no orders.
+
+Broken query:
+SELECT u.id, u.name
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id = NULL
+ORDER BY u.name ASC","SELECT u.id, u.name
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id IS NULL
+ORDER BY u.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Compute total completed order revenue per user without inflating totals because of order item rows.
+
+Broken query:
+SELECT u.name, SUM(o.amount) AS completed_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_revenue DESC","SELECT u.name, SUM(o.amount) AS completed_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users whose number of completed orders is above the global average completed orders per user among users with completed orders.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > AVG(o.id)
+ORDER BY completed_orders DESC","SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > (
+    SELECT AVG(order_count)
+    FROM (
+        SELECT COUNT(*) AS order_count
+        FROM orders
+        WHERE status = 'completed'
+        GROUP BY user_id
+    ) counts
+)
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show products whose total ordered quantity is greater than 2.
+
+Broken query:
+SELECT p.name, SUM(oi.quantity) AS quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+WHERE quantity > 2
+GROUP BY p.id, p.name
+ORDER BY quantity DESC","SELECT p.name, SUM(oi.quantity) AS total_quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+HAVING SUM(oi.quantity) > 2
+ORDER BY total_quantity DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count pending orders for each user with pending orders.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS pending_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'pending_payment'
+GROUP BY u.id, u.name
+ORDER BY pending_orders DESC","SELECT u.name, COUNT(o.id) AS pending_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'pending'
+GROUP BY u.id, u.name
+ORDER BY pending_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List each completed order with the customer's email address.
+
+Broken query:
+SELECT o.id AS order_id, u.email, o.amount
+FROM orders o
+JOIN users u ON o.id = u.id
+WHERE o.status = 'complete'
+ORDER BY o.id ASC","SELECT o.id AS order_id, u.email, o.amount
+FROM orders o
+JOIN users u ON o.user_id = u.id
+WHERE o.status = 'completed'
+ORDER BY o.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every category and its total completed item revenue, including categories with no completed sales as zero.
+
+Broken query:
+SELECT p.category, COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS completed_item_revenue
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id AND o.status = 'completed'
+GROUP BY p.category
+ORDER BY completed_item_revenue DESC","SELECT p.category, COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS completed_item_revenue
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+LEFT JOIN orders o ON oi.order_id = o.id AND o.status = 'completed'
+GROUP BY p.category
+ORDER BY completed_item_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find products that have never appeared in an order item.
+
+Broken query:
+SELECT p.id, p.name
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+WHERE oi.id = NULL
+ORDER BY p.name ASC","SELECT p.id, p.name
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+WHERE oi.id IS NULL
+ORDER BY p.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct users who bought each product in completed orders.
+
+Broken query:
+SELECT p.name, COUNT(o.user_id) AS buyers
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.id, p.name
+ORDER BY buyers DESC","SELECT p.name, COUNT(DISTINCT o.user_id) AS buyers
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.id, p.name
+ORDER BY buyers DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users whose total order amount is greater than 300.
+
+Broken query:
+SELECT u.name, SUM(o.amount) AS amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE amount > 300
+GROUP BY u.id, u.name
+ORDER BY amount DESC","SELECT u.name, SUM(o.amount) AS total_amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+HAVING SUM(o.amount) > 300
+ORDER BY total_amount DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List completed orders with their amounts.
+
+Broken query:
+SELECT id, user_id, amount, created_at
+FROM orders
+WHERE status = 'complete'
+ORDER BY created_at ASC","SELECT id, user_id, amount, created_at
+FROM orders
+WHERE status = 'completed'
+ORDER BY created_at ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List each order with the correct customer name.
+
+Broken query:
+SELECT o.id AS order_id, u.name, o.amount
+FROM orders o
+JOIN users u ON o.id = u.id
+ORDER BY o.id ASC","SELECT o.id AS order_id, u.name, o.amount
+FROM orders o
+JOIN users u ON o.user_id = u.id
+ORDER BY o.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every user and their order count, including users with zero orders.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS order_count
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+ORDER BY u.name ASC","SELECT u.name, COUNT(o.id) AS order_count
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+ORDER BY u.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users without any orders.
+
+Broken query:
+SELECT u.id, u.name
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id = NULL
+ORDER BY u.name ASC","SELECT u.id, u.name
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id IS NULL
+ORDER BY u.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count completed orders per user without counting an order multiple times because it has multiple items.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_orders DESC","SELECT u.name, COUNT(DISTINCT o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find product categories whose average product price is above the global average product price.
+
+Broken query:
+SELECT category, AVG(price) AS average_price
+FROM products
+GROUP BY category
+HAVING AVG(price) > AVG(price)
+ORDER BY average_price DESC","SELECT category, AVG(price) AS average_price
+FROM products
+GROUP BY category
+HAVING AVG(price) > (
+    SELECT AVG(price)
+    FROM products
+)
+ORDER BY average_price DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count pending orders by user.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS pending_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'pending_payment'
+GROUP BY u.id, u.name
+ORDER BY pending_orders DESC","SELECT u.name, COUNT(o.id) AS pending_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'pending'
+GROUP BY u.id, u.name
+ORDER BY pending_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List each order item with the product it references.
+
+Broken query:
+SELECT oi.id AS item_id, p.name, oi.quantity
+FROM order_items oi
+JOIN products p ON oi.order_id = p.id
+ORDER BY oi.id ASC","SELECT oi.id AS item_id, p.name, oi.quantity
+FROM order_items oi
+JOIN products p ON oi.product_id = p.id
+ORDER BY oi.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every product and its total ordered quantity, including products never ordered.
+
+Broken query:
+SELECT p.name, COALESCE(SUM(oi.quantity), 0) AS ordered_quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+ORDER BY p.name ASC","SELECT p.name, COALESCE(SUM(oi.quantity), 0) AS ordered_quantity
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+ORDER BY p.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find products that have never appeared in an order item.
+
+Broken query:
+SELECT p.id, p.name
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+WHERE oi.id = NULL
+ORDER BY p.name ASC","SELECT p.id, p.name
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+WHERE oi.id IS NULL
+ORDER BY p.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct buyers per product in completed orders.
+
+Broken query:
+SELECT p.name, COUNT(o.user_id) AS buyers
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.id, p.name
+ORDER BY buyers DESC","SELECT p.name, COUNT(DISTINCT o.user_id) AS buyers
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.id, p.name
+ORDER BY buyers DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users whose order count is above the global average number of orders per user among users with orders.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS order_count
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > AVG(o.id)
+ORDER BY order_count DESC","SELECT u.name, COUNT(o.id) AS order_count
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > (
+    SELECT AVG(order_count)
+    FROM (
+        SELECT COUNT(*) AS order_count
+        FROM orders
+        GROUP BY user_id
+    ) per_user
+)
+ORDER BY order_count DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users with more than one completed order.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed' AND amount > 1
+GROUP BY u.id, u.name
+ORDER BY amount DESC","SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > 1
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Calculate completed revenue by user.
+
+Broken query:
+SELECT u.name, SUM(o.amount) AS completed_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'paid'
+GROUP BY u.id, u.name
+ORDER BY completed_revenue DESC","SELECT u.name, SUM(o.amount) AS completed_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List order items with their order status.
+
+Broken query:
+SELECT oi.id AS item_id, o.status, oi.quantity
+FROM order_items oi
+JOIN orders o ON oi.id = o.id
+ORDER BY oi.id ASC","SELECT oi.id AS item_id, o.status, oi.quantity
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.id
+ORDER BY oi.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every user and their completed order count, including users with none.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id AND o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY u.name ASC","SELECT u.name, COUNT(o.id) AS completed_orders
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY u.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Compute completed order revenue per user without inflating order amounts by item rows.
+
+Broken query:
+SELECT u.name, SUM(o.amount) AS completed_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_revenue DESC","SELECT u.name, SUM(o.amount) AS completed_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY completed_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find products whose total ordered quantity is above the global average total ordered quantity per ordered product.
+
+Broken query:
+SELECT p.name, SUM(oi.quantity) AS total_quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+HAVING SUM(oi.quantity) > AVG(oi.quantity)
+ORDER BY total_quantity DESC","SELECT p.name, SUM(oi.quantity) AS total_quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+HAVING SUM(oi.quantity) > (
+    SELECT AVG(total_quantity)
+    FROM (
+        SELECT SUM(quantity) AS total_quantity
+        FROM order_items
+        GROUP BY product_id
+    ) per_product
+)
+ORDER BY total_quantity DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find products with total ordered quantity of at least 3.
+
+Broken query:
+SELECT p.name, SUM(oi.quantity) AS quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+WHERE quantity >= 3
+GROUP BY p.id, p.name
+ORDER BY quantity DESC","SELECT p.name, SUM(oi.quantity) AS total_quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+GROUP BY p.id, p.name
+HAVING SUM(oi.quantity) >= 3
+ORDER BY total_quantity DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find completed orders of at least 100 dollars.
+
+Broken query:
+SELECT id, amount, created_at
+FROM orders
+WHERE status = 'closed' AND amount >= 100
+ORDER BY amount DESC","SELECT id, amount, created_at
+FROM orders
+WHERE status = 'completed' AND amount >= 100
+ORDER BY amount DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Calculate completed item revenue by user.
+
+Broken query:
+SELECT u.name, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM users u
+JOIN orders o ON u.id = o.id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY revenue DESC","SELECT u.name, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+ORDER BY revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count orders per product category without double-counting the same order when it has multiple items in the category.
+
+Broken query:
+SELECT p.category, COUNT(o.id) AS orders_with_category
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+GROUP BY p.category
+ORDER BY orders_with_category DESC","SELECT p.category, COUNT(DISTINCT o.id) AS orders_with_category
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+GROUP BY p.category
+ORDER BY orders_with_category DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find order dates whose completed revenue is above the global average completed order amount.
+
+Broken query:
+SELECT created_at, SUM(amount) AS daily_revenue
+FROM orders
+WHERE status = 'completed'
+GROUP BY created_at
+HAVING SUM(amount) > AVG(amount)
+ORDER BY daily_revenue DESC","SELECT created_at, SUM(amount) AS daily_revenue
+FROM orders
+WHERE status = 'completed'
+GROUP BY created_at
+HAVING SUM(amount) > (
+    SELECT AVG(amount)
+    FROM orders
+    WHERE status = 'completed'
+)
+ORDER BY daily_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find plans with at least two users.
+
+Broken query:
+SELECT plan, COUNT(id) AS id
+FROM users
+WHERE id >= 2
+GROUP BY plan
+ORDER BY id DESC","SELECT plan, COUNT(*) AS user_count
+FROM users
+GROUP BY plan
+HAVING COUNT(*) >= 2
+ORDER BY user_count DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show pending order totals by date.
+
+Broken query:
+SELECT created_at, SUM(amount) AS pending_total
+FROM orders
+WHERE status = 'awaiting'
+GROUP BY created_at
+ORDER BY created_at ASC","SELECT created_at, SUM(amount) AS pending_total
+FROM orders
+WHERE status = 'pending'
+GROUP BY created_at
+ORDER BY created_at ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show products purchased by each user.
+
+Broken query:
+SELECT u.name AS user_name, p.name AS product_name
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.id
+JOIN products p ON oi.product_id = p.id
+ORDER BY u.name ASC, p.name ASC","SELECT u.name AS user_name, p.name AS product_name
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+JOIN products p ON oi.product_id = p.id
+ORDER BY u.name ASC, p.name ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every user and their pending order total, including users with no pending orders as zero.
+
+Broken query:
+SELECT u.name, COALESCE(SUM(o.amount), 0) AS pending_total
+FROM users u
+JOIN orders o ON u.id = o.user_id AND o.status = 'pending'
+GROUP BY u.id, u.name
+ORDER BY pending_total DESC","SELECT u.name, COALESCE(SUM(o.amount), 0) AS pending_total
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'pending'
+GROUP BY u.id, u.name
+ORDER BY pending_total DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct completed orders that include each product category.
+
+Broken query:
+SELECT p.category, COUNT(o.id) AS completed_orders
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.category
+ORDER BY completed_orders DESC","SELECT p.category, COUNT(DISTINCT o.id) AS completed_orders
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.category
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List completed orders with customer names.
+
+Broken query:
+SELECT o.id, u.name, o.amount
+FROM orders o
+JOIN users u ON o.user_id = u.id
+WHERE o.status = 'success'
+ORDER BY o.id ASC","SELECT o.id, u.name, o.amount
+FROM orders o
+JOIN users u ON o.user_id = u.id
+WHERE o.status = 'completed'
+ORDER BY o.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List completed order items with customer email.
+
+Broken query:
+SELECT oi.id AS item_id, u.email, oi.quantity
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.id
+JOIN users u ON o.id = u.id
+WHERE o.status = 'completed'
+ORDER BY oi.id ASC","SELECT oi.id AS item_id, u.email, oi.quantity
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.id
+JOIN users u ON o.user_id = u.id
+WHERE o.status = 'completed'
+ORDER BY oi.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every product and completed sold quantity, including products with zero completed sales.
+
+Broken query:
+SELECT p.name, COALESCE(SUM(CASE WHEN o.status = 'completed' THEN oi.quantity ELSE 0 END), 0) AS completed_quantity
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+GROUP BY p.id, p.name
+ORDER BY completed_quantity DESC","SELECT p.name, COALESCE(SUM(CASE WHEN o.status = 'completed' THEN oi.quantity ELSE 0 END), 0) AS completed_quantity
+FROM products p
+LEFT JOIN order_items oi ON p.id = oi.product_id
+LEFT JOIN orders o ON oi.order_id = o.id
+GROUP BY p.id, p.name
+ORDER BY completed_quantity DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct users with any completed item in each category.
+
+Broken query:
+SELECT p.category, COUNT(o.user_id) AS buyers
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.category
+ORDER BY buyers DESC","SELECT p.category, COUNT(DISTINCT o.user_id) AS buyers
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.category
+ORDER BY buyers DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find product categories whose total stock is above the global average stock per product.
+
+Broken query:
+SELECT category, SUM(stock) AS category_stock
+FROM products
+GROUP BY category
+HAVING SUM(stock) > AVG(stock)
+ORDER BY category_stock DESC","SELECT category, SUM(stock) AS category_stock
+FROM products
+GROUP BY category
+HAVING SUM(stock) > (
+    SELECT AVG(stock)
+    FROM products
+)
+ORDER BY category_stock DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find product categories with more than one product.
+
+Broken query:
+SELECT category, COUNT(id) AS id
+FROM products
+WHERE id > 1
+GROUP BY category
+ORDER BY id DESC","SELECT category, COUNT(*) AS product_count
+FROM products
+GROUP BY category
+HAVING COUNT(*) > 1
+ORDER BY product_count DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count completed orders per plan.
+
+Broken query:
+SELECT u.plan, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'complete'
+GROUP BY u.plan
+ORDER BY completed_orders DESC","SELECT u.plan, COUNT(o.id) AS completed_orders
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed'
+GROUP BY u.plan
+ORDER BY completed_orders DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show completed revenue by product category.
+
+Broken query:
+SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM products p
+JOIN order_items oi ON p.id = oi.order_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.category
+ORDER BY revenue DESC","SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.category
+ORDER BY revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Compute total order amount by plan without multiplying orders by their items.
+
+Broken query:
+SELECT u.plan, SUM(o.amount) AS order_amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+GROUP BY u.plan
+ORDER BY order_amount DESC","SELECT u.plan, SUM(o.amount) AS order_amount
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.plan
+ORDER BY order_amount DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users whose completed item revenue is above the global average completed item revenue per buyer.
+
+Broken query:
+SELECT u.name, SUM(oi.quantity * oi.unit_price) AS item_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING SUM(oi.quantity * oi.unit_price) > AVG(oi.quantity * oi.unit_price)
+ORDER BY item_revenue DESC","SELECT u.name, SUM(oi.quantity * oi.unit_price) AS item_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING SUM(oi.quantity * oi.unit_price) > (
+    SELECT AVG(item_revenue)
+    FROM (
+        SELECT o2.user_id, SUM(oi2.quantity * oi2.unit_price) AS item_revenue
+        FROM orders o2
+        JOIN order_items oi2 ON o2.id = oi2.order_id
+        WHERE o2.status = 'completed'
+        GROUP BY o2.user_id
+    ) per_buyer
+)
+ORDER BY item_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users whose completed item revenue is greater than 100.
+
+Broken query:
+SELECT u.name, SUM(oi.quantity * oi.unit_price) AS quantity
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed' AND quantity > 100
+GROUP BY u.id, u.name
+ORDER BY quantity DESC","SELECT u.name, SUM(oi.quantity * oi.unit_price) AS completed_item_revenue
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING SUM(oi.quantity * oi.unit_price) > 100
+ORDER BY completed_item_revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find pending orders created after 2024-01-01.
+
+Broken query:
+SELECT id, user_id, amount, created_at
+FROM orders
+WHERE status = 'waiting' AND created_at > '2024-01-01'
+ORDER BY created_at ASC","SELECT id, user_id, amount, created_at
+FROM orders
+WHERE status = 'pending' AND created_at > '2024-01-01'
+ORDER BY created_at ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List each order with all item rows attached to it.
+
+Broken query:
+SELECT o.id AS order_id, oi.id AS item_id, oi.quantity
+FROM orders o
+JOIN order_items oi ON o.user_id = oi.order_id
+ORDER BY o.id ASC, oi.id ASC","SELECT o.id AS order_id, oi.id AS item_id, oi.quantity
+FROM orders o
+JOIN order_items oi ON o.id = oi.order_id
+ORDER BY o.id ASC, oi.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find completed orders whose amount is above the global average completed order amount.
+
+Broken query:
+SELECT id, user_id, amount
+FROM orders
+WHERE status = 'completed'
+GROUP BY id, user_id, amount
+HAVING amount > AVG(amount)
+ORDER BY amount DESC","SELECT id, user_id, amount
+FROM orders
+WHERE status = 'completed'
+  AND amount > (
+      SELECT AVG(amount)
+      FROM orders
+      WHERE status = 'completed'
+  )
+ORDER BY amount DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find orders with more than one item row.
+
+Broken query:
+SELECT o.id, COUNT(oi.id) AS quantity
+FROM orders o
+JOIN order_items oi ON o.id = oi.order_id
+WHERE quantity > 1
+GROUP BY o.id
+ORDER BY quantity DESC","SELECT o.id, COUNT(oi.id) AS item_rows
+FROM orders o
+JOIN order_items oi ON o.id = oi.order_id
+GROUP BY o.id
+HAVING COUNT(oi.id) > 1
+ORDER BY item_rows DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Calculate item revenue for completed orders by product.
+
+Broken query:
+SELECT p.name, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'paid'
+GROUP BY p.id, p.name
+ORDER BY revenue DESC","SELECT p.name, SUM(oi.quantity * oi.unit_price) AS revenue
+FROM products p
+JOIN order_items oi ON p.id = oi.product_id
+JOIN orders o ON oi.order_id = o.id
+WHERE o.status = 'completed'
+GROUP BY p.id, p.name
+ORDER BY revenue DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show the product category for every order item.
+
+Broken query:
+SELECT oi.id, p.category
+FROM order_items oi
+JOIN products p ON oi.id = p.id
+ORDER BY oi.id ASC","SELECT oi.id, p.category
+FROM order_items oi
+JOIN products p ON oi.product_id = p.id
+ORDER BY oi.id ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count completed orders by date without duplicating orders that have multiple item rows.
+
+Broken query:
+SELECT o.created_at, COUNT(o.id) AS completed_orders
+FROM orders o
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY o.created_at
+ORDER BY o.created_at ASC","SELECT o.created_at, COUNT(DISTINCT o.id) AS completed_orders
+FROM orders o
+JOIN order_items oi ON o.id = oi.order_id
+WHERE o.status = 'completed'
+GROUP BY o.created_at
+ORDER BY o.created_at ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show completed order counts by order date.
+
+Broken query:
+SELECT created_at, COUNT(*) AS completed_orders
+FROM orders
+WHERE status = 'done'
+GROUP BY created_at
+ORDER BY created_at ASC","SELECT created_at, COUNT(*) AS completed_orders
+FROM orders
+WHERE status = 'completed'
+GROUP BY created_at
+ORDER BY created_at ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: List orders with the user's plan.
+
+Broken query:
+SELECT o.id, u.plan, o.amount
+FROM orders o
+JOIN users u ON o.id = u.id
+ORDER BY o.created_at ASC","SELECT o.id, u.plan, o.amount
+FROM orders o
+JOIN users u ON o.user_id = u.id
+ORDER BY o.created_at ASC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every user and distinct products bought, including users who bought none.
+
+Broken query:
+SELECT u.name, COUNT(DISTINCT oi.product_id) AS distinct_products
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+GROUP BY u.id, u.name
+ORDER BY distinct_products DESC","SELECT u.name, COUNT(DISTINCT oi.product_id) AS distinct_products
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+LEFT JOIN order_items oi ON o.id = oi.order_id
+GROUP BY u.id, u.name
+ORDER BY distinct_products DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct products purchased by each user.
+
+Broken query:
+SELECT u.name, COUNT(oi.id) AS distinct_products
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+GROUP BY u.id, u.name
+ORDER BY distinct_products DESC","SELECT u.name, COUNT(DISTINCT oi.product_id) AS distinct_products
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_items oi ON o.id = oi.order_id
+GROUP BY u.id, u.name
+ORDER BY distinct_products DESC"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show completed revenue by user plan.
+
+Broken query:
+SELECT u.plan, SUM(o.amount) AS revenue FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'pending' GROUP BY u.plan","SELECT u.plan, SUM(o.amount) AS revenue FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed' GROUP BY u.plan"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show pending revenue by user plan.
+
+Broken query:
+SELECT u.plan, SUM(o.amount) AS revenue FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed' GROUP BY u.plan","SELECT u.plan, SUM(o.amount) AS revenue FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'pending' GROUP BY u.plan"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show users whose average order amount is greater than the overall average order amount.
+
+Broken query:
+SELECT u.name, AVG(o.amount) AS avg_amount FROM users u JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name HAVING AVG(o.amount) < (SELECT AVG(amount) FROM orders)","SELECT u.name, AVG(o.amount) AS avg_amount FROM users u JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name HAVING AVG(o.amount) > (SELECT AVG(amount) FROM orders)"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show categories whose average product price is below the overall average product price.
+
+Broken query:
+SELECT category, AVG(price) AS avg_price FROM products GROUP BY category HAVING AVG(price) > (SELECT AVG(price) FROM products)","SELECT category, AVG(price) AS avg_price FROM products GROUP BY category HAVING AVG(price) < (SELECT AVG(price) FROM products)"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show completed order item revenue by product category.
+
+Broken query:
+SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'pending' GROUP BY p.category","SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.category"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show pending order item revenue by product category.
+
+Broken query:
+SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.category","SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'pending' GROUP BY p.category"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct completed orders for each product category.
+
+Broken query:
+SELECT p.category, COUNT(o.id) AS completed_orders FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.category","SELECT p.category, COUNT(DISTINCT o.id) AS completed_orders FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.category"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Count distinct completed buyers for each product category.
+
+Broken query:
+SELECT p.category, COUNT(o.id) AS buyers FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.category","SELECT p.category, COUNT(DISTINCT o.user_id) AS buyers FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.category"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every user and completed order total, including users with zero completed total.
+
+Broken query:
+SELECT u.name, COALESCE(SUM(o.amount), 0) AS completed_total FROM users u JOIN orders o ON u.id = o.user_id AND o.status = 'completed' GROUP BY u.id, u.name","SELECT u.name, COALESCE(SUM(o.amount), 0) AS completed_total FROM users u LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'completed' GROUP BY u.id, u.name"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every product and total ordered quantity, including products never ordered.
+
+Broken query:
+SELECT p.name, COALESCE(SUM(oi.quantity), 0) AS ordered_quantity FROM products p JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id, p.name","SELECT p.name, COALESCE(SUM(oi.quantity), 0) AS ordered_quantity FROM products p LEFT JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id, p.name"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show every product and completed revenue, including products with zero completed revenue.
+
+Broken query:
+SELECT p.name, COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS completed_revenue FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.id, p.name","SELECT p.name, COALESCE(SUM(CASE WHEN o.status = 'completed' THEN oi.quantity * oi.unit_price ELSE 0 END), 0) AS completed_revenue FROM products p LEFT JOIN order_items oi ON p.id = oi.product_id LEFT JOIN orders o ON oi.order_id = o.id GROUP BY p.id, p.name"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find users with no pending orders.
+
+Broken query:
+SELECT u.id, u.name FROM users u LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'completed' WHERE o.id IS NULL","SELECT u.id, u.name FROM users u LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'pending' WHERE o.id IS NULL"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find products that have not appeared in completed orders.
+
+Broken query:
+SELECT p.id, p.name FROM products p WHERE p.id NOT IN (SELECT oi.product_id FROM order_items oi JOIN orders o ON oi.order_id = o.id WHERE o.status = 'pending')","SELECT p.id, p.name FROM products p WHERE p.id NOT IN (SELECT oi.product_id FROM order_items oi JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed')"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Find orders with more than one product item row.
+
+Broken query:
+SELECT o.id, COUNT(oi.id) AS item_rows FROM orders o JOIN order_items oi ON o.user_id = oi.order_id GROUP BY o.id HAVING COUNT(oi.id) > 1","SELECT o.id, COUNT(oi.id) AS item_rows FROM orders o JOIN order_items oi ON o.id = oi.order_id GROUP BY o.id HAVING COUNT(oi.id) > 1"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show products whose ordered quantity is above the average ordered quantity per product.
+
+Broken query:
+SELECT p.name, SUM(oi.quantity) AS total_quantity FROM products p JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id, p.name HAVING SUM(oi.quantity) < (SELECT AVG(total_quantity) FROM (SELECT SUM(quantity) AS total_quantity FROM order_items GROUP BY product_id))","SELECT p.name, SUM(oi.quantity) AS total_quantity FROM products p JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id, p.name HAVING SUM(oi.quantity) > (SELECT AVG(total_quantity) FROM (SELECT SUM(quantity) AS total_quantity FROM order_items GROUP BY product_id))"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show users whose completed revenue is above average completed revenue per user.
+
+Broken query:
+SELECT u.name, SUM(o.amount) AS completed_revenue FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed' GROUP BY u.id, u.name HAVING SUM(o.amount) < (SELECT AVG(user_revenue) FROM (SELECT SUM(amount) AS user_revenue FROM orders WHERE status = 'completed' GROUP BY user_id))","SELECT u.name, SUM(o.amount) AS completed_revenue FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed' GROUP BY u.id, u.name HAVING SUM(o.amount) > (SELECT AVG(user_revenue) FROM (SELECT SUM(amount) AS user_revenue FROM orders WHERE status = 'completed' GROUP BY user_id))"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show completed order count by user for users with at least two completed orders.
+
+Broken query:
+SELECT u.name, COUNT(o.id) AS completed_orders FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed' GROUP BY u.id, u.name HAVING COUNT(o.id) > 2","SELECT u.name, COUNT(o.id) AS completed_orders FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed' GROUP BY u.id, u.name HAVING COUNT(o.id) >= 2"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show products with inventory value at least 9990.
+
+Broken query:
+SELECT id, name, price, stock FROM products WHERE price * stock > 9990","SELECT id, name, price, stock FROM products WHERE price * stock >= 9990"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show orders created on or after DATE('now','-10 days').
+
+Broken query:
+SELECT id, user_id, amount, created_at FROM orders WHERE created_at > DATE('now','-10 days')","SELECT id, user_id, amount, created_at FROM orders WHERE created_at >= DATE('now','-10 days')"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show users created on or before DATE('now','-30 days').
+
+Broken query:
+SELECT id, name, created_at FROM users WHERE created_at < DATE('now','-30 days')","SELECT id, name, created_at FROM users WHERE created_at <= DATE('now','-30 days')"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show completed orders from pro users.
+
+Broken query:
+SELECT o.id, o.amount FROM orders o JOIN users u ON o.user_id = u.id WHERE o.status = 'pending' AND u.plan = 'pro'","SELECT o.id, o.amount FROM orders o JOIN users u ON o.user_id = u.id WHERE o.status = 'completed' AND u.plan = 'pro'"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show pending orders from free users.
+
+Broken query:
+SELECT o.id, o.amount FROM orders o JOIN users u ON o.user_id = u.id WHERE o.status = 'completed' AND u.plan = 'free'","SELECT o.id, o.amount FROM orders o JOIN users u ON o.user_id = u.id WHERE o.status = 'pending' AND u.plan = 'free'"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show item rows for electronics products.
+
+Broken query:
+SELECT oi.id, oi.quantity FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE p.category = 'furniture'","SELECT oi.id, oi.quantity FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE p.category = 'electronics'"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show item rows for furniture products.
+
+Broken query:
+SELECT oi.id, oi.quantity FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE p.category = 'electronics'","SELECT oi.id, oi.quantity FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE p.category = 'furniture'"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show product names for order 1.
+
+Broken query:
+SELECT p.name FROM products p JOIN order_items oi ON p.id = oi.product_id WHERE oi.order_id = 7",SELECT p.name FROM products p JOIN order_items oi ON p.id = oi.product_id WHERE oi.order_id = 1
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show product names for order 4.
+
+Broken query:
+SELECT p.name FROM products p JOIN order_items oi ON p.id = oi.product_id WHERE oi.order_id = 5",SELECT p.name FROM products p JOIN order_items oi ON p.id = oi.product_id WHERE oi.order_id = 4
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show customer names for orders over 300.
+
+Broken query:
+SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.id WHERE o.amount > 300","SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.user_id WHERE o.amount > 300"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show total item quantity by order status.
+
+Broken query:
+SELECT o.status, SUM(oi.unit_price) AS total_quantity FROM orders o JOIN order_items oi ON o.id = oi.order_id GROUP BY o.status","SELECT o.status, SUM(oi.quantity) AS total_quantity FROM orders o JOIN order_items oi ON o.id = oi.order_id GROUP BY o.status"
+"You are a SQL correction assistant working with the following database schema:
+
+Tables:
+  users       (id, name, email, created_at DATE, plan)
+  orders      (id, user_id, amount REAL, status, created_at DATE)
+  order_items (id, order_id, product_id, quantity INTEGER, unit_price REAL)
+  products    (id, name, category, price REAL, stock INTEGER)
+
+Relationships:
+  orders.user_id        → users.id
+  order_items.order_id  → orders.id
+  order_items.product_id → products.id
+
+Status values: 'completed', 'pending'
+
+You will be given a potentially broken or semantically incorrect SQL query along with the intended behavior. Reason through if it's wrong and why using the schema above, then output a corrected version inside <answer> tags.
+
+Format your response as:
+<reasoning>
+...your step by step reasoning...
+</reasoning>
+<answer>
+...corrected SQL only, no explanation...
+</answer>","Intent: Show total item revenue by order status.
+
+Broken query:
+SELECT o.status, SUM(oi.quantity) AS item_revenue FROM orders o JOIN order_items oi ON o.id = oi.order_id GROUP BY o.status","SELECT o.status, SUM(oi.quantity * oi.unit_price) AS item_revenue FROM orders o JOIN order_items oi ON o.id = oi.order_id GROUP BY o.status"

@@ -1,0 +1,302 @@
+TEST_ID,USER_INPUT,TARGET_INTENT
+TEST_001,List my schedule for this afternoon.,LIST_APPOINTMENTS
+TEST_002,What are my appointments Tuesday morning?,LIST_APPOINTMENTS
+TEST_003,What's on my calendar this week?,LIST_APPOINTMENTS
+TEST_004,What is my availability Monday morning?,LIST_APPOINTMENTS
+TEST_005,View my schedule New Years Eve,LIST_APPOINTMENTS
+TEST_006,List my appointments on Halloween,LIST_APPOINTMENTS
+TEST_007,What is my schedule next Thursday?,LIST_APPOINTMENTS
+TEST_008,Do I have any appointments on 30/10/2025?,LIST_APPOINTMENTS
+TEST_009,How many patients did I see last month?,UNSUPPORTED_REQUEST
+TEST_010,Who is my next patient?,UNSUPPORTED_REQUEST
+TEST_011,Cancel my appointments tomorrow afternoon.,CANCEL_APPOINTMENTS
+TEST_012,Cancel my schedule for the 30th.,CANCEL_APPOINTMENTS
+TEST_013,"I'm sick, cancel all my appointments today.",CANCEL_APPOINTMENTS
+TEST_014,Cancel everything on November 1st from 10 - 12,CANCEL_APPOINTMENTS
+TEST_015,Need to cancel my morning appointments tomorrow,CANCEL_APPOINTMENTS
+TEST_016,Cancel my 10:00 - 10:30 patient Monday,CANCEL_APPOINTMENTS
+TEST_017,Move my appointments December 12 to December 13 2025,RESCHEDULE_APPOINTMENTS
+TEST_018,I need to move today's appointments to tomorrow,RESCHEDULE_APPOINTMENTS
+TEST_019,Move my November appointments to December,RESCHEDULE_APPOINTMENTS
+TEST_020,Reschedule my 10/31/2025 appointments to 11/02/2025,RESCHEDULE_APPOINTMENTS
+TEST_021,Reschedule my 9 AM on Halloween to 9 AM the following day,RESCHEDULE_APPOINTMENTS
+TEST_022,Block my calendar tomorrow.,BLOCK_SLOTS
+TEST_023,I won't be available from 2-4pm today.,BLOCK_SLOTS
+TEST_024,Block out all of next week,BLOCK_SLOTS
+TEST_025,I need to take a personal break today from 1 PM to 2 PM.,BLOCK_SLOTS
+TEST_026,Block off my mornings for June 5th next year,BLOCK_SLOTS
+TEST_027,"I'm going on leave, block my calendar from Dec 1st to Dec 10th 2025",BLOCK_SLOTS
+TEST_028,Block Dec 1st to Dec 10th,BLOCK_SLOTS
+TEST_029,"I am leaving, block my calendar from Dec 1st to Dec 10th",BLOCK_SLOTS
+TEST_030,"From now on, I'm available on Fridays.",UPDATE_SPECIAL_SLOTS
+TEST_031,I am busy today,BLOCK_SLOTS
+TEST_032,I'm not working *this* Saturday.,BLOCK_SLOTS
+TEST_033,Remove blocks this weekend,UNBLOCK_SLOTS
+TEST_034,Free up this weekend,UPDATE_SPECIAL_SLOTS
+TEST_035,I need to clear Sunday's block,UNBLOCK_SLOTS
+TEST_036,Im free again,UNBLOCK_SLOTS
+TEST_037,Im free,UNBLOCK_SLOTS
+TEST_038," open up my mornings for next week",UPDATE_SPECIAL_SLOTS
+TEST_039,Make November 13th available again,UNBLOCK_SLOTS
+TEST_040,I can work this monday again,UNBLOCK_SLOTS
+TEST_041,Add extra hours for upcoming Tuesday,UPDATE_SPECIAL_SLOTS
+TEST_042,Open up evening slots tomorrow,UPDATE_SPECIAL_SLOTS
+TEST_043,I can work late this Saturday until 11PM,UPDATE_SPECIAL_SLOTS
+TEST_044,I can take appointments on Monday before my usual start time,UPDATE_SPECIAL_SLOTS
+TEST_045,I can work this Monday,UPDATE_SPECIAL_SLOTS
+TEST_046,I can work Monday,UPDATE_SPECIAL_SLOTS
+TEST_047,Hello,CONVERSATIONAL_GREETING
+TEST_048,hey there,CONVERSATIONAL_GREETING
+TEST_049,how are you?,CONVERSATIONAL_GREETING
+TEST_050,Hi,CONVERSATIONAL_GREETING
+TEST_051,Good morning,CONVERSATIONAL_GREETING
+TEST_052,What's up?,CONVERSATIONAL_GREETING
+TEST_053,"Hello, list my schedule for today",LIST_APPOINTMENTS
+TEST_054,"Hello, I need to cancel tomorrow.",CANCEL_APPOINTMENTS
+TEST_055,thank you,CLOSING_CONVERSATION
+TEST_056,thanks a lot,CLOSING_CONVERSATION
+TEST_057,sounds good,CLOSING_CONVERSATION
+TEST_058,goodbye,CLOSING_CONVERSATION
+TEST_059,k thx bye,CLOSING_CONVERSATION
+TEST_060,"Perfect, thanks!",CLOSING_CONVERSATION
+TEST_061,"Thank you, block tomorrow",BLOCK_SLOTS
+TEST_062,"Thank you, now show me my schedule.",LIST_APPOINTMENTS
+TEST_063,Cancel Mr. Smith's 4pm appointment.,UNSUPPORTED_REQUEST
+TEST_064,Move my next appointment to 3pm.,UNSUPPORTED_REQUEST
+TEST_065,Reschedule Evan for sometime next week.,UNSUPPORTED_REQUEST
+TEST_066,Book a new patient for tomorrow at 10.,UNSUPPORTED_REQUEST
+TEST_067,Add a follow-up for Mr. Okui,UNSUPPORTED_REQUEST
+TEST_068,Lighten my schedule for tomorrow.,UNSUPPORTED_REQUEST
+TEST_069,How many patients did I see last Tuesday?,UNSUPPORTED_REQUEST
+TEST_070,Who is my 2pm appointment?,UNSUPPORTED_REQUEST
+TEST_071,Can you send a reminder to my 3pm?,UNSUPPORTED_REQUEST
+TEST_072,I'm running late.,IRRELEVANT_QUERY
+TEST_073,What's the weather like today?,IRRELEVANT_QUERY
+TEST_074,Tell me a joke.,IRRELEVANT_QUERY
+TEST_075,Order me a pizza.,IRRELEVANT_QUERY
+TEST_076,Who won the cricket match last night?,IRRELEVANT_QUERY
+TEST_077,What are the symptoms of the flu?,IRRELEVANT_QUERY
+TEST_078,How do I use this app?,IRRELEVANT_QUERY
+TEST_079,Who is the health minister?,IRRELEVANT_QUERY
+TEST_080,Please get rid of all appointments on the 31st,CANCEL_APPOINTMENTS
+TEST_081,"I'm sick, cancel the rest of the day",CANCEL_APPOINTMENTS
+TEST_082,"Emergency, I need to cancel all appointments from 2 PM onwards",CANCEL_APPOINTMENTS
+TEST_083,Please remove all bookings for next Tuesday,CANCEL_APPOINTMENTS
+TEST_084,Cancel all appointments between 1 and 5 PM,CANCEL_APPOINTMENTS
+TEST_085,"I need to block off all of tomorrow, so cancel all the appointments first",CANCEL_APPOINTMENTS
+TEST_086,Clear my 3 PM,CANCEL_APPOINTMENTS
+TEST_087,"I need to cancel, I'm not feeling well",CANCEL_APPOINTMENTS
+TEST_088,Let's move all of Monday's patients,RESCHEDULE_APPOINTMENTS
+TEST_089,My 2 PM to 4 PM block of patients needs to be moved to 3 PM to 5 PM,RESCHEDULE_APPOINTMENTS
+TEST_090,I need to reschedule... just clear my calendar for tomorrow,CANCEL_APPOINTMENTS
+TEST_091,"Let's reschedule, I need to block my calendar",BLOCK_SLOTS
+TEST_092,"I'm taking a break, block off the next hour",BLOCK_SLOTS
+TEST_093,"I have a personal appointment at 3, make me unavailable",BLOCK_SLOTS
+TEST_094,Block out this hour,BLOCK_SLOTS
+TEST_095,Cancel my 3 PM slot,CANCEL_APPOINTMENTS
+TEST_096,Block my 3pm patient,BLOCK_SLOTS
+TEST_097,I'm free from 2-4pm again,UNBLOCK_SLOTS
+TEST_098,I'm available on Fridays again,UNBLOCK_SLOTS
+TEST_099,"Unblock me, and show me my schedule",UNBLOCK_SLOTS
+TEST_100,I want to add some hours to my schedule,UPDATE_SPECIAL_SLOTS
+TEST_101,I'm no longer working on Fridays,UPDATE_SPECIAL_SLOTS
+TEST_102,I want to start my day at 10 AM instead of 9 from now on,UPDATE_SPECIAL_SLOTS
+TEST_103,I want to add an hour to my day,UPDATE_SPECIAL_SLOTS
+TEST_104,Block my calendar this Friday,BLOCK_SLOTS
+TEST_105,I'm free on Friday,UNBLOCK_SLOTS
+TEST_106,I need more breaks,UNSUPPORTED_REQUEST
+TEST_107,My 4 PM appointment needs to be pushed,RESCHEDULE_APPOINTMENTS
+TEST_108,Cancel my last appointment of the day,CANCEL_APPOINTMENTS
+TEST_109,What's my next appointment?,UNSUPPORTED_REQUEST
+TEST_110,Wipe my schedule for Monday,CANCEL_APPOINTMENTS
+TEST_111,Cancel my appointments this month,CANCEL_APPOINTMENTS
+TEST_112,No appointments on the first Tuesday of November.,BLOCK_SLOTS
+TEST_113,I'm unavailable two hours from now for 90 minutes.,BLOCK_SLOTS
+TEST_114,Review my schedule for all of December.,LIST_APPOINTMENTS
+TEST_115,List my appointments from now until the end of the day.,LIST_APPOINTMENTS
+TEST_116,What's on the agenda for this Friday?,LIST_APPOINTMENTS
+TEST_117,Do I have anything on the books for October 10th?,LIST_APPOINTMENTS
+TEST_118,Please display my calendar for the day after tomorrow.,LIST_APPOINTMENTS
+TEST_119,List all appointments for the 15th of next month.,LIST_APPOINTMENTS
+TEST_120,What does my week look like starting Monday?,LIST_APPOINTMENTS
+TEST_121,Show me the whole of December 2026.,LIST_APPOINTMENTS
+TEST_122,Can I see my schedule for the next three days?,LIST_APPOINTMENTS
+TEST_123,What appointments are set for the 3rd?,LIST_APPOINTMENTS
+TEST_124,Review my schedule for the upcoming holiday weekend.,LIST_APPOINTMENTS
+TEST_125,How busy am I on the 22nd?,LIST_APPOINTMENTS
+TEST_126,Pull up my calendar for the first of the month.,LIST_APPOINTMENTS
+TEST_127,I need to see all my commitments for next Wednesday.,LIST_APPOINTMENTS
+TEST_128,What's my day looking like on the 5th?,LIST_APPOINTMENTS
+TEST_129,Show me the last week of this month.,LIST_APPOINTMENTS
+TEST_130,What's my schedule for the next 72 hours?,LIST_APPOINTMENTS
+TEST_131,Do I have any appointments on the 10th?,LIST_APPOINTMENTS
+TEST_132,List my schedule for 2026-02-15.,LIST_APPOINTMENTS
+TEST_133,What's happening on the 30th?,LIST_APPOINTMENTS
+TEST_134,Show me the schedule for the next 5 days.,LIST_APPOINTMENTS
+TEST_135,Can you display my appointments for the 19th?,LIST_APPOINTMENTS
+TEST_136,I need to block off 9 AM to 11 AM on Tuesday.,BLOCK_SLOTS
+TEST_137,Make me unavailable for all of next Monday.,BLOCK_SLOTS
+TEST_138,I'm busy on the 10th from 1 PM.,BLOCK_SLOTS
+TEST_139,Block my entire day on the 31st.,BLOCK_SLOTS
+TEST_140,Set my schedule to 'busy' for all of next week.,BLOCK_SLOTS
+TEST_141,I can't work on the 4th of July.,BLOCK_SLOTS
+TEST_142,Block from 13:00 to 15:00 on Friday.,BLOCK_SLOTS
+TEST_143,I need to take a personal day on the 18th.,BLOCK_SLOTS
+TEST_144,Please block the morning of the 20th for me.,BLOCK_SLOTS
+TEST_145,I'm not available between 3 and 4 PM today.,BLOCK_SLOTS
+TEST_146,Block my schedule for the last Friday of the month.,BLOCK_SLOTS
+TEST_147,I have a conference all day on the 12th.,BLOCK_SLOTS
+TEST_148,Reserve 10:30 to 11:30 for me tomorrow.,BLOCK_SLOTS
+TEST_149,I'm out of office for the first two days of next month.,BLOCK_SLOTS
+TEST_150,Block off from 1 PM to 3 PM on the 2nd.,BLOCK_SLOTS
+TEST_151,I'm not available on the 23rd at all.,BLOCK_SLOTS
+TEST_152,Block the entire day for the 16th.,BLOCK_SLOTS
+TEST_153,I need to block 16:00 to 17:00 on the 11th.,BLOCK_SLOTS
+TEST_154,Make me busy on the 27th from 9 to 12.,BLOCK_SLOTS
+TEST_155,I need to block the first Monday of next month.,BLOCK_SLOTS
+TEST_156,Make me available again on Friday afternoon.,UNBLOCK_SLOTS
+TEST_157,Clear the block from 3 PM to 5 PM today.,UNBLOCK_SLOTS
+TEST_158,Open up my schedule for all of next Tuesday.,UNBLOCK_SLOTS
+TEST_159,Remove the block for this weekend.,UNBLOCK_SLOTS
+TEST_160,I'm available again on the 19th from 1 PM to 3 PM.,UNBLOCK_SLOTS
+TEST_161,Free up my time on the 2nd.,UNBLOCK_SLOTS
+TEST_162,Clear my availability for the 8th.,UNBLOCK_SLOTS
+TEST_163,Unblock the evening of the 14th.,UNBLOCK_SLOTS
+TEST_164,I'm not busy anymore on Wednesday morning.,UNBLOCK_SLOTS
+TEST_165,Make the 25th available again.,UNBLOCK_SLOTS
+TEST_166,"My conference on the 7th was cancelled, open my day.",UNBLOCK_SLOTS
+TEST_167,Unblock 09:00 to 12:00 on the 16th.,UNBLOCK_SLOTS
+TEST_168,I can take appointments again on the 23rd.,UNBLOCK_SLOTS
+TEST_169,Please remove the block for tomorrow's lunch.,UNBLOCK_SLOTS
+TEST_170,Open my schedule for the 29th.,UNBLOCK_SLOTS
+TEST_171,I'm free again on the 13th.,UNBLOCK_SLOTS
+TEST_172,Unblock the 4th from 10 AM to 11 AM.,UNBLOCK_SLOTS
+TEST_173,Clear all blocks for today.,UNBLOCK_SLOTS
+TEST_174,Make my morning available on the 21st.,UNBLOCK_SLOTS
+TEST_175,Shift everything from this Friday to next Friday.,RESCHEDULE_APPOINTMENTS
+TEST_176,Reschedule all of Monday's appointments to Tuesday.,RESCHEDULE_APPOINTMENTS
+TEST_177,Move my entire schedule from the 1st to the 3rd.,RESCHEDULE_APPOINTMENTS
+TEST_178,I need to push all of tomorrow's schedule to the 10th.,RESCHEDULE_APPOINTMENTS
+TEST_179,Move all appointments from the 5th to the 12th.,RESCHEDULE_APPOINTMENTS
+TEST_180,Shift my morning of the 7th to the afternoon of the 8th.,RESCHEDULE_APPOINTMENTS
+TEST_181,Reschedule the afternoon of the 20th to the morning of the 21st.,RESCHEDULE_APPOINTMENTS
+TEST_182,Move my entire day on the 14th to the 16th.,RESCHEDULE_APPOINTMENTS
+TEST_183,Push all appointments from next week to the week after.,RESCHEDULE_APPOINTMENTS
+TEST_184,Shift the schedule from the 9th to the 11th.,RESCHEDULE_APPOINTMENTS
+TEST_185,I need to move all of next Monday's bookings to Wednesday.,RESCHEDULE_APPOINTMENTS
+TEST_186,Reschedule my entire calendar from Feb 1st to Feb 3rd.,RESCHEDULE_APPOINTMENTS
+TEST_187,Move all appointments from 2 PM to 5 PM today to the same time tomorrow.,RESCHEDULE_APPOINTMENTS
+TEST_188,Relocate all of today's afternoon appointments to tomorrow morning.,RESCHEDULE_APPOINTMENTS
+TEST_189,Shift all appointments from the 22nd to the 24th.,RESCHEDULE_APPOINTMENTS
+TEST_190,Move the whole of next week's schedule to the following week.,RESCHEDULE_APPOINTMENTS
+TEST_191,Reschedule my morning on the 6th to the afternoon of the 6th.,RESCHEDULE_APPOINTMENTS
+TEST_192,Push all of the 17th's schedule to the 18th.,RESCHEDULE_APPOINTMENTS
+TEST_193,Move everything from this Monday to this Friday.,RESCHEDULE_APPOINTMENTS
+TEST_194,Shift all appointments from the 28th to the 1st of next month.,RESCHEDULE_APPOINTMENTS
+TEST_195,Add extra hours for me on Saturday from 10 AM to 2 PM.,UPDATE_SPECIAL_SLOTS
+TEST_196,"Open up my schedule for this evening, 6 PM to 8 PM.",UPDATE_SPECIAL_SLOTS
+TEST_197,I can take extra appointments on the 10th.,UPDATE_SPECIAL_SLOTS
+TEST_198,Please add special slots for the morning of the 24th.,UPDATE_SPECIAL_SLOTS
+TEST_199,Open my schedule for the upcoming holiday.,UPDATE_SPECIAL_SLOTS
+TEST_200,I can work a half-day this Saturday.,UPDATE_SPECIAL_SLOTS
+TEST_201,Add 08:00 to 10:00 on the 30th as available.,UPDATE_SPECIAL_SLOTS
+TEST_202,Open up my schedule for this coming Sunday.,UPDATE_SPECIAL_SLOTS
+TEST_203,I can take on more patients on the 19th.,UPDATE_SPECIAL_SLOTS
+TEST_204,Add availability from 17:00 to 19:00 on the 28th.,UPDATE_SPECIAL_SLOTS
+TEST_205,I can work late on the 3rd until 8 PM.,UPDATE_SPECIAL_SLOTS
+TEST_206,Add some weekend hours for me.,UPDATE_SPECIAL_SLOTS
+TEST_207,I'm available on the 7th from 6 PM onwards.,UPDATE_SPECIAL_SLOTS
+TEST_208,Open up 7 AM to 9 AM tomorrow as extra time.,UPDATE_SPECIAL_SLOTS
+TEST_209,"I can work this Saturday, add 12 PM to 4 PM.",UPDATE_SPECIAL_SLOTS
+TEST_210,Please add availability for the 26th from 5 PM to 9 PM.,UPDATE_SPECIAL_SLOTS
+TEST_211,Move my 10 AM appointment to 11 AM.,RESCHEDULE_APPOINTMENTS
+TEST_212,Can you shift the 3 PM patient to 4 PM?,RESCHEDULE_APPOINTMENTS
+TEST_213,Reschedule just the 2:30 appointment.,RESCHEDULE_APPOINTMENTS
+TEST_214,Move Mr. Johnson's appointment from Monday to Tuesday.,UNSUPPORTED_REQUEST
+TEST_215,Can you find a new time for my 4 PM consultation?,RESCHEDULE_APPOINTMENTS
+TEST_216,Shift only the first appointment of the day.,RESCHEDULE_APPOINTMENTS
+TEST_217,I want to move the last appointment of the day to tomorrow.,RESCHEDULE_APPOINTMENTS
+TEST_218,Reschedule the 'Annual Physical' appointment at 11.,RESCHEDULE_APPOINTMENTS
+TEST_219,Nudge my 9 AM back by 30 minutes.,RESCHEDULE_APPOINTMENTS
+TEST_220,Push back my 4:30 appointment by an hour.,RESCHEDULE_APPOINTMENTS
+TEST_221,Can we move the 10:00 patient to 10:30?,UNSUPPORTED_REQUEST
+TEST_222,I need to move one appointment from today.,RESCHEDULE_APPOINTMENTS
+TEST_223,Please delete the 3:30 appointment for tomorrow.,CANCEL_APPOINTMENTS
+TEST_224,Remove the 10 AM slot from my schedule.,BLOCK_SLOTS
+TEST_225,I need to cancel on Mrs. Smith at 2 PM.,CANCEL_APPOINTMENTS
+TEST_226,Remove the 'Consult' at 3 PM.,CANCEL_APPOINTMENTS
+TEST_227,Delete my appointment with Dr. Lee.,CANCEL_APPOINTMENTS
+TEST_228,I need to cancel one appointment today.,CANCEL_APPOINTMENTS
+TEST_229,Schedule a new patient for 10 AM tomorrow.,UNSUPPORTED_REQUEST
+TEST_230,I need to schedule a 'New Consult' for 3 PM.,UNSUPPORTED_REQUEST
+TEST_231,I need to cancel my afternoon.,CANCEL_APPOINTMENTS
+TEST_232,Clear my schedule for the 10th.,CANCEL_APPOINTMENTS
+TEST_233,Wipe the slate clean for tomorrow.,CANCEL_APPOINTMENTS
+TEST_234,Can I fit an emergency patient today?,LIST_APPOINTMENTS
+TEST_235,I'm not seeing anyone on Monday.,BLOCK_SLOTS
+TEST_236,I need to open up my Friday.,UNBLOCK_SLOTS
+TEST_237,Move my day.,RESCHEDULE_APPOINTMENTS
+TEST_238,I need to reschedule.,RESCHEDULE_APPOINTMENTS
+TEST_239,I need to free up my morning.,UNBLOCK_SLOTS
+TEST_240,Cancel my availability for the 8th.,CANCEL_APPOINTMENTS
+TEST_241,Re-open my schedule for today.,UNBLOCK_SLOTS
+TEST_242,Push my schedule.,RESCHEDULE_APPOINTMENTS
+TEST_243,I'm not doing appointments on the 17th.,BLOCK_SLOTS
+TEST_244,I need to make a change to my schedule.,RESCHEDULE_APPOINTMENTS
+TEST_245,Clear the block.,UNBLOCK_SLOTS
+TEST_246,Open my time for the 29th.,UNBLOCK_SLOTS
+TEST_247,I'm not available anymore.,BLOCK_SLOTS
+TEST_248,Make my Friday empty.,BLOCK_SLOTS
+TEST_249,My availability for tomorrow has changed.,UPDATE_SPECIAL_SLOTS
+TEST_250,I'm not working the 1st.,BLOCK_SLOTS
+TEST_251,Move my afternoon.,RESCHEDULE_APPOINTMENTS
+TEST_252,Cancel my block for tomorrow.,UNBLOCK_SLOTS
+TEST_253,What's my day?,LIST_APPOINTMENTS
+TEST_254,I'm not coming in on the 26th.,CANCEL_APPOINTMENTS
+TEST_255,I have an opening on Friday.,UPDATE_SPECIAL_SLOTS
+TEST_256,Clear all my blocks for next week.,UNBLOCK_SLOTS
+TEST_257,I can't do the 19th.,BLOCK_SLOTS
+TEST_258,No more appointments today.,BLOCK_SLOTS
+TEST_259,Change my 4 PM.,RESCHEDULE_APPOINTMENTS
+TEST_260,I need to cancel my schedule.,CANCEL_APPOINTMENTS
+TEST_261,Free me up on the 21st.,UNBLOCK_SLOTS
+TEST_262,"I need to work on patient charts, block 3-5.",BLOCK_SLOTS
+TEST_263,Update my availability for next month.,UPDATE_SPECIAL_SLOTS
+TEST_264,Shw me my calender for tomorow.,LIST_APPOINTMENTS
+TEST_265,Blok my time on Munday.,BLOCK_SLOTS
+TEST_266,Reshedule nxt week.,RESCHEDULE_APPOINTMENTS
+TEST_267,unblock,UNBLOCK_SLOTS
+TEST_268,list,LIST_APPOINTMENTS
+TEST_269,schedule,LIST_APPOINTMENTS
+TEST_270,"Hi, can you show me my schedule for today?",LIST_APPOINTMENTS
+TEST_271,I need to see my schedule for tomorrow and then cancel my 10 AM.,LIST_APPOINTMENTS
+TEST_272,Block all of next week and show me my schedule for today.,BLOCK_SLOTS
+TEST_273,"Move all of today's appointments to tomorrow, and also book a new patient at 4.",RESCHEDULE_APPOINTMENTS
+TEST_274,"I'm going to lunch, block 12-1.",BLOCK_SLOTS
+TEST_275,"Please, I need to see my schedule.",LIST_APPOINTMENTS
+TEST_276,Just show me the 5th.,LIST_APPOINTMENTS
+TEST_277,block 2-4,BLOCK_SLOTS
+TEST_278,move 10th to 12th,RESCHEDULE_APPOINTMENTS
+TEST_279,"I need to reschedule my appointments for the 1st, 2nd, and 3rd.",RESCHEDULE_APPOINTMENTS
+TEST_280,"I'm not available from 1 to 2, or from 4 to 5 tomorrow.",BLOCK_SLOTS
+TEST_281,Move all my morning appointments from this week to next week.,RESCHEDULE_APPOINTMENTS
+TEST_282,blck my aftrnoon,BLOCK_SLOTS
+TEST_283,reskedule,RESCHEDULE_APPOINTMENTS
+TEST_284,Block 9-10 AM. Then unblock 2-3 PM.,BLOCK_SLOTS
+TEST_285,"My schedule for the 10th, please.",LIST_APPOINTMENTS
+TEST_286,I need to... uh... block my time... from 1 to 3.,BLOCK_SLOTS
+TEST_287,can u show me wut i hav tmrw,LIST_APPOINTMENTS
+TEST_288,"I'm free. My 10 AM patient, John, is not coming.",UNSUPPORTED_REQUEST
+TEST_289,"Move everything from the 4th, but only the afternoon.",RESCHEDULE_APPOINTMENTS
+TEST_290,Show me my schedule for 2027.,LIST_APPOINTMENTS
+TEST_291,Show me my schedule for 2020.,LIST_APPOINTMENTS
+TEST_292,I need to block from 10 PM to 2 AM.,BLOCK_SLOTS
+TEST_293,"Unblock my schedule, I feel better now.",UNBLOCK_SLOTS
+TEST_294,I guess I can work this weekend.,UPDATE_SPECIAL_SLOTS
+TEST_295,Block the 1st. Block the 2nd. Block the 3rd.,BLOCK_SLOTS
+TEST_296,Unblock the next 2 hours.,UNBLOCK_SLOTS
+TEST_297,"Show me my schedule for the day, and also, what's the capital of France?",LIST_APPOINTMENTS
+TEST_298,I need to block 15:30 to 16:00.,BLOCK_SLOTS
+TEST_299,"My 10 AM, John Smith, is here. Can you check him in?",UNSUPPORTED_REQUEST
+TEST_300,"I need to cancel my 2 PM, but reschedule my 3 PM.",CANCEL_APPOINTMENTS
+TEST_301,I can work overtime on Friday,UPDATE_SPECIAL_SLOTS
